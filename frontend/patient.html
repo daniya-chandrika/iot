@@ -1,0 +1,52 @@
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Patient Page</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Patient View</h2>
+    <p>See doctors and availability. Book a simple appointment.</p>
+    <div id="doctors"></div>
+
+    <h3>Book Appointment (demo)</h3>
+    <form id="bookForm">
+      <label>Patient ID<input id="patient_id" value="1"/></label>
+      <label>Doctor<select id="doctor_select"></select></label>
+      <label>Date & Time<input id="datetime" type="datetime-local"/></label>
+      <button type="submit">Book</button>
+    </form>
+
+    <div id="msg"></div>
+
+    <script src="app.js"></script>
+    <script>
+      async function init() {
+        await window.loadDoctors();
+        const docs = await window.fetchDoctors();
+        const sel = document.getElementById('doctor_select');
+        sel.innerHTML = '';
+        docs.forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d.id;
+          opt.textContent = d.name + ' ('+d.specialization+')';
+          sel.appendChild(opt);
+        });
+      }
+      init();
+
+      document.getElementById('bookForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const patient_id = document.getElementById('patient_id').value;
+        const doctor_id = document.getElementById('doctor_select').value;
+        const datetime = document.getElementById('datetime').value;
+        const res = await window.bookAppointment({patient_id, doctor_id, datetime});
+        document.getElementById('msg').textContent = res.ok ? 'Booked!' : ('Error: '+JSON.stringify(res));
+      });
+    </script>
+  </div>
+</body>
+</html>

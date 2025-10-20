@@ -1,0 +1,30 @@
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Director Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Director Dashboard</h2>
+    <div>
+      <button id="refresh">Refresh Logs & Doctors</button>
+    </div>
+    <h3>Doctors</h3>
+    <div id="doctors"></div>
+    <h3>Check Logs (recent)</h3>
+    <div id="logs"></div>
+    <script src="app.js"></script>
+    <script>
+      document.getElementById('refresh').addEventListener('click', loadAll);
+      async function loadAll() {
+        await window.loadDoctors();
+        await window.loadLogs();
+      }
+      loadAll();
+    </script>
+  </div>
+</body>
+</html>
